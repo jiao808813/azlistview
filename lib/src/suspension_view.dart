@@ -2,7 +2,7 @@ import 'package:azlistview/src/az_common.dart';
 import 'package:flutter/material.dart';
 
 /// on all sus section callback(map: Used to scroll the list to the specified tag location).
-typedef void OnSusSectionCallBack(Map<String, int> map);
+typedef void OnSusSectionCallBack(Map<String?, int> map);
 
 ///Suspension Widget.Currently only supports fixed height items!
 class SuspensionView extends StatefulWidget {
@@ -13,7 +13,7 @@ class SuspensionView extends StatefulWidget {
   final Widget contentWidget;
 
   /// suspension widget.
-  final Widget suspensionWidget;
+  final Widget? suspensionWidget;
 
   /// ListView ScrollController.
   final ScrollController controller;
@@ -25,19 +25,19 @@ class SuspensionView extends StatefulWidget {
   final int itemHeight;
 
   /// on sus tag change callback.
-  final ValueChanged<String> onSusTagChanged;
+  final ValueChanged<String?>? onSusTagChanged;
 
   /// on sus section callback.
-  final OnSusSectionCallBack onSusSectionInited;
+  final OnSusSectionCallBack? onSusSectionInited;
 
-  final AzListViewHeader header;
+  final AzListViewHeader? header;
 
   SuspensionView({
-    Key key,
-    @required this.data,
-    @required this.contentWidget,
-    @required this.suspensionWidget,
-    @required this.controller,
+    Key? key,
+    required this.data,
+    required this.contentWidget,
+    required this.suspensionWidget,
+    required this.controller,
     this.suspensionHeight = 40,
     this.itemHeight = 50,
     this.onSusTagChanged,
@@ -53,17 +53,17 @@ class SuspensionView extends StatefulWidget {
 
 class _SuspensionWidgetState extends State<SuspensionView> {
   int _suspensionTop = 0;
-  int _lastIndex;
-  int _suSectionListLength;
+  int? _lastIndex;
+  late int _suSectionListLength;
 
-  List<int> _suspensionSectionList = new List();
-  Map<String, int> _suspensionSectionMap = new Map();
+  List<int> _suspensionSectionList = [];
+  Map<String?, int> _suspensionSectionMap = new Map();
 
   @override
   void initState() {
     super.initState();
     if (widget.header != null) {
-      _suspensionTop = -widget.header.height;
+      _suspensionTop = -widget.header!.height;
     }
     widget.controller.addListener(() {
       int offset = widget.controller.offset.toInt();
@@ -71,18 +71,18 @@ class _SuspensionWidgetState extends State<SuspensionView> {
       if (_index != -1 && _lastIndex != _index) {
         _lastIndex = _index;
         if (widget.onSusTagChanged != null) {
-          widget.onSusTagChanged(_suspensionSectionMap.keys.toList()[_index]);
+          widget.onSusTagChanged!(_suspensionSectionMap.keys.toList()[_index]);
         }
       }
     });
   }
 
   int _getIndex(int offset) {
-    if (widget.header != null && offset < widget.header.height) {
-      if (_suspensionTop != -widget.header.height &&
+    if (widget.header != null && offset < widget.header!.height) {
+      if (_suspensionTop != -widget.header!.height &&
           widget.suspensionWidget != null) {
         setState(() {
-          _suspensionTop = -widget.header.height;
+          _suspensionTop = -widget.header!.height;
         });
       }
       return 0;
@@ -114,10 +114,10 @@ class _SuspensionWidgetState extends State<SuspensionView> {
   void _init() {
     _suspensionSectionMap.clear();
     int offset = 0;
-    String tag;
+    String? tag;
     if (widget.header != null) {
-      _suspensionSectionMap[widget.header.tag] = 0;
-      offset = widget.header.height;
+      _suspensionSectionMap[widget.header!.tag] = 0;
+      offset = widget.header!.height;
     }
     widget.data?.forEach((v) {
       if (tag != v.getSuspensionTag()) {
@@ -133,7 +133,7 @@ class _SuspensionWidgetState extends State<SuspensionView> {
       ..addAll(_suspensionSectionMap.values);
     _suSectionListLength = _suspensionSectionList.length;
     if (widget.onSusSectionInited != null) {
-      widget.onSusSectionInited(_suspensionSectionMap);
+      widget.onSusSectionInited!(_suspensionSectionMap);
     }
   }
 
@@ -149,7 +149,7 @@ class _SuspensionWidgetState extends State<SuspensionView> {
         top: _suspensionTop.toDouble() - 0.1,
         left: 0.0,
         right: 0.0,
-        child: widget.suspensionWidget,
+        child: widget.suspensionWidget!,
       ));
     }
     return Stack(children: children);

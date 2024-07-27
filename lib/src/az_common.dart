@@ -2,16 +2,16 @@ import 'package:flutter/widgets.dart';
 
 /// ISuspension Bean.
 abstract class ISuspensionBean {
-  bool isShowSuspension;
+  bool? isShowSuspension;
 
-  String getSuspensionTag(); //Suspension Tag
+  String? getSuspensionTag(); //Suspension Tag
 }
 
 /// AzListView Header.
 class AzListViewHeader {
   AzListViewHeader({
-    @required this.height,
-    @required this.builder,
+    required this.height,
+    required this.builder,
     this.tag = "↑",
   });
 
@@ -32,7 +32,7 @@ class SuspensionUtil {
       } else if (a.getSuspensionTag() == "#" || b.getSuspensionTag() == "@") {
         return 1;
       } else {
-        return a.getSuspensionTag().compareTo(b.getSuspensionTag());
+        return a.getSuspensionTag()!.compareTo(b.getSuspensionTag()!);
       }
     });
   }
@@ -40,11 +40,11 @@ class SuspensionUtil {
   /// get index data list by suspension tag.
   /// 获取索引列表。
   static List<String> getTagIndexList(List<ISuspensionBean> list) {
-    List<String> indexData = new List();
-    if (list != null && list.isNotEmpty) {
-      String tempTag;
+    List<String> indexData = [];
+    if (list.isNotEmpty) {
+      String? tempTag;
       for (int i = 0, length = list.length; i < length; i++) {
-        String tag = list[i].getSuspensionTag();
+        String tag = list[i].getSuspensionTag()!;
         if (tag.length > 2) tag = tag.substring(0, 2);
         if (tempTag != tag) {
           indexData.add(tag);
@@ -59,9 +59,9 @@ class SuspensionUtil {
   /// 设置显示悬停Header状态。
   static void setShowSuspensionStatus(List<ISuspensionBean> list) {
     if (list == null || list.isEmpty) return;
-    String tempTag;
+    String? tempTag;
     for (int i = 0, length = list.length; i < length; i++) {
-      String tag = list[i].getSuspensionTag();
+      String? tag = list[i].getSuspensionTag();
       if (tempTag != tag) {
         tempTag = tag;
         list[i].isShowSuspension = true;

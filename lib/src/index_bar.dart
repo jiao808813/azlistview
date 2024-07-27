@@ -5,9 +5,9 @@ typedef void IndexBarTouchCallback(IndexBarDetails model);
 
 /// IndexModel.
 class IndexBarDetails {
-  String tag; //current touch tag.
-  int position; //current touch position.
-  bool isTouchDown; //is touch down.
+  String? tag; //current touch tag.
+  int? position; //current touch position.
+  bool? isTouchDown; //is touch down.
 
   IndexBarDetails({this.tag, this.position, this.isTouchDown});
 }
@@ -46,9 +46,9 @@ const List<String> INDEX_DATA_DEF = const [
 /// IndexBar.
 class IndexBar extends StatefulWidget {
   IndexBar(
-      {Key key,
+      {Key? key,
       this.data = INDEX_DATA_DEF,
-      @required this.onTouch,
+      required this.onTouch,
       this.width = 30,
       this.itemHeight = 16,
       this.color = Colors.transparent,
@@ -87,13 +87,13 @@ class IndexBar extends StatefulWidget {
 }
 
 class _SuspensionListViewIndexBarState extends State<IndexBar> {
-  bool _isTouchDown = false;
+  bool? _isTouchDown = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      color: _isTouchDown ? widget.touchDownColor : widget.color,
+      color: _isTouchDown! ? widget.touchDownColor : widget.color,
       width: widget.width.toDouble(),
       child: _IndexBar(
         data: widget.data,
@@ -128,17 +128,17 @@ class _IndexBar extends StatefulWidget {
   final int itemHeight;
 
   /// IndexBar text style.
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
-  final TextStyle touchDownTextStyle;
+  final TextStyle? touchDownTextStyle;
 
   /// Item touch callback.
   final IndexBarTouchCallback onTouch;
 
   _IndexBar(
-      {Key key,
+      {Key? key,
       this.data = INDEX_DATA_DEF,
-      @required this.onTouch,
+      required this.onTouch,
       this.width = 30,
       this.itemHeight = 16,
       this.textStyle,
@@ -151,7 +151,7 @@ class _IndexBar extends StatefulWidget {
 }
 
 class _IndexBarState extends State<_IndexBar> {
-  List<int> _indexSectionList = new List();
+  List<int> _indexSectionList = [];
   int _widgetTop = -1;
   int _lastIndex = 0;
   bool _widgetTopChange = false;
@@ -189,13 +189,13 @@ class _IndexBarState extends State<_IndexBar> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle _style = widget.textStyle;
+    TextStyle? _style = widget.textStyle;
     if (_indexModel.isTouchDown == true) {
       _style = widget.touchDownTextStyle;
     }
     _init();
 
-    List<Widget> children = new List();
+    List<Widget> children = [];
     widget.data.forEach((v) {
       children.add(new SizedBox(
         width: widget.width.toDouble(),
@@ -208,7 +208,7 @@ class _IndexBarState extends State<_IndexBar> {
       onVerticalDragDown: (DragDownDetails details) {
         if (_widgetTop == -1 || _widgetTopChange) {
           _widgetTopChange = false;
-          RenderBox box = context.findRenderObject();
+          RenderBox box = context.findRenderObject() as RenderBox;
           Offset topLeftPosition = box.localToGlobal(Offset.zero);
           _widgetTop = topLeftPosition.dy.toInt();
         }

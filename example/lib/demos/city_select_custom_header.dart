@@ -78,8 +78,7 @@ class _CitySelectCustomHeaderRouteState
         runAlignment: WrapAlignment.center,
         spacing: 10.0,
         children: hotCityList.map((e) {
-          return OutlineButton(
-            borderSide: BorderSide(color: Colors.grey[300], width: .5),
+          return TextButton(
             child: Text(e.name),
             onPressed: () {
               print("OnItemClick: $e");
